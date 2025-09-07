@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="northwind.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="6214"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Alphabetical list of products" custom_title="0" dock_id="1" table="4,29:mainAlphabetical list of products"/><dock_state state="000000ff00000000fd0000000100000002000003a600000274fc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000000003a60000015c00ffffff000003a60000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Alphabetical list of products" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="65"/><column index="2" value="257"/><column index="3" value="68"/><column index="4" value="72"/><column index="5" value="163"/><column index="6" value="59"/><column index="7" value="80"/><column index="8" value="84"/><column index="9" value="82"/><column index="10" value="81"/><column index="11" value="117"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">
+
+
 -- TOP 10 CUSTOMERS BY ORDER VALUE
 SELECT 
     c.CustomerID,
@@ -19,10 +21,9 @@ Join &quot;Order Details&quot; od
 JOIN Products p
      ON od.ProductID = p.ProductID
 Group by o.OrderID
-Order By TotalOrderValue DESC
+Order By TotalOrderValue DESC
 LIMIT 10;
 
-
 
 -- TOP 5 BEST SELLING PRODUCTS 
 SELECT 
@@ -40,10 +41,9 @@ JOIN &quot;Order Details&quot; od
 JOIN Suppliers s
     ON p.SupplierID = s.SupplierID
 GROUP BY p.ProductID, p.ProductName
-ORDER BY TotalUnitsSold DESC
+ORDER BY TotalUnitsSold DESC
 LIMIT 5;
-
-
+
 
 
 -- SALES EMPLOYEE WITH THE HIGHEST SALES FIGURE
@@ -60,146 +60,75 @@ GROUP BY e.EmployeeID, EmployeeName
 ORDER BY TotalSales DESC
 LIMIT 1;
 
-
-
+
+
 -- SALES PERFORMANCE BY COUNTRY
-SELECT 
-    c.Country,
-    ROUND(SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)), 2) AS TotalSales
-FROM Customers c
-JOIN Orders o 
-    ON c.CustomerID = o.CustomerID
-JOIN &quot;Order Details&quot; od 
-    ON o.OrderID = od.OrderID
-GROUP BY c.Country
-ORDER BY TotalSales DESC;
-
-
-DELETE FROM Customers
-WHERE Country IS NULL OR Country = '';
-
-
-
--- UNDERPERFORMING COUNTRIES
-SELECT 
-    c.Country,
-    ROUND(SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)), 2) AS TotalSales
-FROM Customers c
-JOIN Orders o 
-    ON c.CustomerID = o.CustomerID
-JOIN &quot;Order Details&quot; od 
-    ON o.OrderID = od.OrderID
-GROUP BY c.Country
-HAVING TotalSales &lt; 10000000
-ORDER BY TotalSales ASC;
-
-
-
--- MOST REVENUE GENERATING PRODUCT Category
-SELECT 
-    cat.CategoryName,
-    ROUND(SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)), 2) AS Revenue
-FROM Categories cat
-JOIN Products p 
-    ON cat.CategoryID = p.CategoryID
-JOIN &quot;Order Details&quot; od 
-    ON p.ProductID = od.ProductID
-GROUP BY cat.CategoryName
-ORDER BY Revenue DESC
-LIMIT 1;
-
-
-
--- MOST EXPENSIVE Shipper
-SELECT 
-    sh.ShipperID,
-    sh.CompanyName,
-    ROUND(AVG(o.Freight), 2) AS AvgFreightCost
-FROM Shippers sh
-JOIN Orders o 
-    ON sh.ShipperID = o.ShipVia
-GROUP BY sh.ShipperID, sh.CompanyName
-ORDER BY AvgFreightCost DESC
-LIMIT 1;
-
-
-
--- FREQUENTLY OUT OF STOCK BUT HIGH DEMAND Product
-SELECT 
-    p.ProductID,
-    p.ProductName,
-    p.UnitsInStock,
-    COUNT(od.OrderID) AS OrdersCount
-FROM Products p
-JOIN &quot;Order Details&quot; od 
-    ON p.ProductID = od.ProductID
-WHERE p.UnitsInStock = 0
-GROUP BY p.ProductID, p.ProductName, p.UnitsInStock
-HAVING OrdersCount &gt; 20
-ORDER BY OrdersCount DESC;
-
-</sql><sql name="SQL 2">SELECT OrderID,ProductID,UnitPrice,Quantity,Discount, ROUND(od.UnitPrice * od.Quantity * (1 - od.Discount), 2) AS OrderValue FROM &quot;Order Details&quot; od;
 SELECT 
-    o.OrderID,
-    o.OrderDate,
-	o.ShipVia,
-    c.CustomerID,
+   c.Country,
+   ROUND(SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)), 2) AS TotalSales
+FROM Customers c
+JOIN Orders o 
+    ON c.CustomerID = o.CustomerID
+JOIN &quot;Order Details&quot; od 
+    ON o.OrderID = od.OrderID
+GROUP BY c.Country
+ORDER BY TotalSales DESC;
+
+
+-- UNDERPERFORMING COUNTRIES
+SELECT 
     c.Country,
-	c.Region,
-    p.ProductID,
-    p.ProductName,
+    ROUND(SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)), 2) AS TotalSales
+FROM Customers c
+JOIN Orders o 
+    ON c.CustomerID = o.CustomerID
+JOIN &quot;Order Details&quot; od 
+    ON o.OrderID = od.OrderID
+GROUP BY c.Country
+HAVING TotalSales &lt; 10000000
+ORDER BY TotalSales ASC;
+
+
+-- MOST REVENUE GENERATING PRODUCT Category
+SELECT 
     cat.CategoryName,
-    od.UnitPrice,
-    od.Quantity,
-    od.Discount,
-	s.ShipperID,
-	s.CompanyName,
-    (od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue
-FROM Orders o
-JOIN &quot;Order Details&quot; od ON o.OrderID = od.OrderID
-JOIN Customers c ON o.CustomerID = c.CustomerID
-JOIN Products p ON od.ProductID = p.ProductID
-JOIN Categories cat ON p.CategoryID = cat.CategoryID
-JOIN Shippers s ON o.ShipVia = s.ShipperID;
+    ROUND(SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)), 2) AS Revenue
+FROM Categories cat
+JOIN Products p 
+    ON cat.CategoryID = p.CategoryID
+JOIN &quot;Order Details&quot; od 
+    ON p.ProductID = od.ProductID
+GROUP BY cat.CategoryName
+ORDER BY Revenue DESC
+LIMIT 1;
 
-WITH MonthlySales AS (
-    SELECT 
-        p.ProductID,
-        strftime('%Y-%m', o.OrderDate) AS Month,
-        SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS MonthlyRevenue
-    FROM Products p
-    JOIN &quot;Order Details&quot; od ON p.ProductID = od.ProductID
-    JOIN Orders o ON o.OrderID = od.OrderID
-    GROUP BY p.ProductID, strftime('%Y-%m', o.OrderDate)
-)
-SELECT * FROM MonthlySales;
 
+
+-- MOST EXPENSIVE Shipper
+SELECT 
+    sh.ShipperID,
+    sh.CompanyName,
+    ROUND(AVG(o.Freight), 2) AS AvgFreightCost
+FROM Shippers sh
+JOIN Orders o 
+    ON sh.ShipperID = o.ShipVia
+GROUP BY sh.ShipperID, sh.CompanyName
+ORDER BY AvgFreightCost DESC
+LIMIT 1;
+
+
+-- FREQUENTLY OUT OF STOCK BUT HIGH DEMAND Product
 SELECT 
     p.ProductID,
     p.ProductName,
-    strftime('%Y-%m', o.OrderDate) AS Month,
-    SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS MonthlyRevenue
-FROM Products p
-JOIN &quot;Order Details&quot; od ON p.ProductID = od.ProductID
-JOIN Orders o ON o.OrderID = od.OrderID
-GROUP BY p.ProductID, Month
-ORDER BY p.ProductID, Month;
-
-
-SELECT 
-    p.ProductID,
-    p.ProductName,
-	p.SupplierID,
-	p.UnitsInStock,
-	s.SupplierID,
-	s.CompanyName,
-	s.Region,
-    SUM(od.Quantity) AS TotalUnitsSold
+    p.UnitsInStock,
+    COUNT(od.OrderID) AS OrdersCount
 FROM Products p
 JOIN &quot;Order Details&quot; od 
     ON p.ProductID = od.ProductID
-JOIN Suppliers s
-    ON p.SupplierID = s.SupplierID
-GROUP BY p.ProductID, p.ProductName
-ORDER BY TotalUnitsSold DESC;
-  </sql><current_tab id="0"/></tab_sql></sqlb_project>
+WHERE p.UnitsInStock = 0
+GROUP BY p.ProductID, p.ProductName, p.UnitsInStock
+HAVING OrdersCount &gt; 20
+ORDER BY OrdersCount DESC;
+
+
