@@ -60,8 +60,10 @@ The analysis uses SQL for data extraction and transformation and Power BI for in
 ### Executive Summary
 <img width="1400" height="857" alt="executive_summary" src="https://github.com/user-attachments/assets/d6bf7772-fe1c-46f4-ac78-557f9f0a74be" />
 
+
 ### Customer Insights
-<img width="1404" height="861" alt="customer_insights" src="https://github.com/user-attachments/assets/02570827-2edb-4648-a1d0-9cee48c5313b" />
+<img width="1395" height="861" alt="Customer Insights" src="https://github.com/user-attachments/assets/34c8763f-d637-4dde-ad2c-6b7c9ed6442f" />
+
 
 ## Product Analysis
 <img width="1408" height="852" alt="product_analysis" src="https://github.com/user-attachments/assets/56f04d5d-4aa6-440c-b8db-e039ce911024" />
