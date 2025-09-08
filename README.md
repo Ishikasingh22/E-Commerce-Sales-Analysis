@@ -34,7 +34,7 @@ The analysis uses SQL for data extraction and transformation and Power BI for in
  -Most Expensive Shipper on Average
 
 # Power BI Dashboard Features
-✅ Page 1: Executive Summary
+Page 1: Executive Summary
 
 -Total Revenue, Orders, Average Order Value
 
@@ -42,14 +42,14 @@ The analysis uses SQL for data extraction and transformation and Power BI for in
 
 -Revenue by Country
 
-✅ Page 2: Customer Insights
+Page 2: Customer Insights
 -Top 10 Customers by Revenue
 
 -VIP Customer Identification
 
 -Regionwise Customer Distribution
 
-✅ Page 3: Product & Category Analysis
+Page 3: Product & Category Analysis
 -Top 5 Products
 
 -Category Revenue Contribution
